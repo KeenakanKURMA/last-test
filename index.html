@@ -1,418 +1,103 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AR Selfie Camera - Debug Version</title>
+    <title>AR Experience</title>
     <script src="https://aframe.io/releases/1.4.1/aframe.min.js"></script>
     <script src="https://cdn.rawgit.com/jeromeetienne/AR.js/2.2.1/aframe/build/aframe-ar.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aframe-extras@6.1.1/dist/aframe-extras.min.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
-            color: white;
-            overflow-x: hidden;
-        }
-        
-        .container {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-        
-        header {
-            background: rgba(0, 0, 0, 0.7);
-            padding: 1rem;
-            text-align: center;
-            backdrop-filter: blur(10px);
-        }
-        
-        h1 {
-            font-size: 2.2rem;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(90deg, #ff8a00, #e52e71);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        .subtitle {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-        
-        .main-content {
-            display: flex;
-            flex: 1;
-            padding: 1rem;
-            gap: 1rem;
-        }
-        
-        .ar-container {
-            flex: 3;
-            position: relative;
-            border-radius: 15px;
+            margin: 0;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            background: #000;
         }
-        
-        .info-panel {
-            flex: 1;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 1.5rem;
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-        
-        .info-section {
-            margin-bottom: 1.5rem;
-        }
-        
-        .info-section h2 {
-            color: #4CAF50;
-            margin-bottom: 0.8rem;
-            border-bottom: 2px solid #4CAF50;
-            padding-bottom: 0.5rem;
-        }
-        
-        .pattern-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-        
-        .pattern-item {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 1rem;
-            border-radius: 10px;
-            text-align: center;
-            transition: transform 0.3s, background 0.3s;
-        }
-        
-        .pattern-item:hover {
-            transform: translateY(-5px);
-            background: rgba(76, 175, 80, 0.3);
-        }
-        
-        .pattern-color {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            margin: 0 auto 0.5rem;
-        }
-        
-        .controls {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-        
-        button {
-            background: linear-gradient(90deg, #4CAF50, #2E7D32);
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             color: white;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 50px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-        }
-        
-        button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
-        }
-        
-        button:active {
-            transform: translateY(1px);
-        }
-        
-        .debug-panel {
-            background: rgba(0, 0, 0, 0.8);
-            padding: 1rem;
-            border-radius: 10px;
-            margin-top: 1rem;
-            font-family: monospace;
-        }
-        
-        .debug-item {
-            margin-bottom: 0.5rem;
-            display: flex;
-            justify-content: space-between;
-        }
-        
-        .status-indicator {
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            margin-right: 0.5rem;
-        }
-        
-        .status-ok {
-            background: #4CAF50;
-        }
-        
-        .status-warning {
-            background: #FF9800;
-        }
-        
-        .status-error {
-            background: #F44336;
-        }
-        
-        footer {
             text-align: center;
-            padding: 1rem;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(10px);
-        }
-        
-        .marker-detected {
-            animation: pulse 1.5s infinite;
-        }
-        
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7); }
-            70% { box-shadow: 0 0 0 15px rgba(76, 175, 80, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0); }
-        }
-        
-        /* Responsive design */
-        @media (max-width: 768px) {
-            .main-content {
-                flex-direction: column;
-            }
-            
-            .pattern-grid {
-                grid-template-columns: 1fr;
-            }
+            font-family: Arial;
+            z-index: 1000;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>AR Selfie Camera</h1>
-            <p class="subtitle">Point your camera at markers to see 3D objects</p>
-        </header>
-        
-        <div class="main-content">
-            <div class="ar-container" id="arContainer">
-                <a-scene 
-                    embedded 
-                    arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
-                    vr-mode-ui="enabled: false"
-                    renderer="logarithmicDepthBuffer: true;"
-                    gesture-detector
-                    id="arScene"
-                >
-                    <!-- Lighting -->
-                    <a-entity light="type: ambient; color: #ffffff; intensity: 0.6"></a-entity>
-                    <a-entity light="type: directional; color: #ffffff; intensity: 0.8" position="1 1 1"></a-entity>
-
-                    <!-- Marker 1 - Sphere -->
-                    <a-marker 
-                        type="pattern" 
-                        url="https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.patt"
-                        emitevents="true" 
-                        id="marker1"
-                    >
-                        <a-sphere 
-                            position="0 0.5 0" 
-                            radius="0.3" 
-                            color="#FFD700"
-                            animation="property: rotation; to: 0 360 0; loop: true; dur: 5000"
-                        ></a-sphere>
-                    </a-marker>
-
-                    <!-- Marker 2 - Box -->
-                    <a-marker 
-                        preset="hiro" 
-                        emitevents="true" 
-                        id="marker2"
-                    >
-                        <a-box 
-                            position="0 0.5 0" 
-                            scale="0.5 0.5 0.5" 
-                            color="#FF4136"
-                            animation="property: rotation; to: 360 360 0; loop: true; dur: 4000"
-                        ></a-box>
-                    </a-marker>
-
-                    <!-- Camera -->
-                    <a-entity camera></a-entity>
-                </a-scene>
-                
-                <div class="controls">
-                    <button id="screenshotBtn">Take Selfie</button>
-                    <button id="toggleDebugBtn">Toggle Debug</button>
-                </div>
-            </div>
-            
-            <div class="info-panel">
-                <div class="info-section">
-                    <h2>How to Use</h2>
-                    <p>1. Allow camera access when prompted</p>
-                    <p>2. Point your camera at one of the markers</p>
-                    <p>3. 3D objects will appear on the markers</p>
-                    <p>4. Use the "Take Selfie" button to capture</p>
-                </div>
-                
-                <div class="info-section">
-                    <h2>Markers & Objects</h2>
-                    <div class="pattern-grid">
-                        <div class="pattern-item">
-                            <div class="pattern-color" style="background: #FFD700;"></div>
-                            <p>Hiro Pattern</p>
-                            <p>Golden Sphere</p>
-                        </div>
-                        <div class="pattern-item">
-                            <div class="pattern-color" style="background: #FF4136;"></div>
-                            <p>Default Hiro</p>
-                            <p>Red Box</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="info-section">
-                    <h2>Debug Information</h2>
-                    <div class="debug-panel" id="debugPanel">
-                        <div class="debug-item">
-                            <span>AR.js Library:</span>
-                            <span id="arjsStatus">Loading...</span>
-                        </div>
-                        <div class="debug-item">
-                            <span>Camera Access:</span>
-                            <span id="cameraStatus">Checking...</span>
-                        </div>
-                        <div class="debug-item">
-                            <span>Marker Detection:</span>
-                            <span id="markerStatus">Waiting...</span>
-                        </div>
-                        <div class="debug-item">
-                            <span>Last Event:</span>
-                            <span id="lastEvent">None</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <footer>
-            <p>AR Selfie Camera with A-Frame and AR.js | Point camera at markers to see 3D objects</p>
-        </footer>
+    <!-- Loading Screen -->
+    <div class="loading" id="loading">
+        <h2>AR Experience</h2>
+        <p>Allow camera permission to start</p>
     </div>
 
+    <!-- AR Scene -->
+    <a-scene 
+        embedded 
+        arjs="sourceType: webcam; debugUIEnabled: false; facingMode: environment;"
+        renderer="logarithmicDepthBuffer: true;"
+        style="display: none;"
+        id="arScene"
+    >
+        <!-- Lighting -->
+        <a-entity light="type: ambient; color: #ffffff; intensity: 0.8"></a-entity>
+        <a-entity light="type: directional; color: #ffffff; intensity: 1.0" position="2 5 3"></a-entity>
+
+        <!-- Pattern 1 -->
+        <a-marker type="pattern" url="patterns/pattern1.patt">
+            <a-entity 
+                gltf-model="models/animation1.glb"
+                scale="0.5 0.5 0.5"
+                position="0 0.5 0"
+                animation-mixer="clip: *; loop: repeat"
+            ></a-entity>
+        </a-marker>
+
+        <!-- Pattern 2 -->
+        <a-marker type="pattern" url="patterns/pattern2.patt">
+            <a-entity 
+                gltf-model="models/animation2.glb"
+                scale="0.5 0.5 0.5"
+                position="0 0.5 0"
+                animation-mixer="clip: *; loop: repeat"
+            ></a-entity>
+        </a-marker>
+
+        <!-- Pattern 3 -->
+        <a-marker type="pattern" url="patterns/pattern3.patt">
+            <a-entity 
+                gltf-model="models/animation3.glb"
+                scale="0.5 0.5 0.5"
+                position="0 0.5 0"
+                animation-mixer="clip: *; loop: repeat"
+            ></a-entity>
+        </a-marker>
+
+        <!-- Pattern 4 -->
+        <a-marker type="pattern" url="patterns/pattern4.patt">
+            <a-entity 
+                gltf-model="models/animation4.glb"
+                scale="0.5 0.5 0.5"
+                position="0 0.5 0"
+                animation-mixer="clip: *; loop: repeat"
+            ></a-entity>
+        </a-marker>
+
+        <a-entity camera></a-entity>
+    </a-scene>
+
     <script>
-        // Debug information elements
-        const arjsStatus = document.getElementById('arjsStatus');
-        const cameraStatus = document.getElementById('cameraStatus');
-        const markerStatus = document.getElementById('markerStatus');
-        const lastEvent = document.getElementById('lastEvent');
-        const debugPanel = document.getElementById('debugPanel');
-        const arContainer = document.getElementById('arContainer');
-        const arScene = document.getElementById('arScene');
-        
-        // Buttons
-        const screenshotBtn = document.getElementById('screenshotBtn');
-        const toggleDebugBtn = document.getElementById('toggleDebugBtn');
-        
-        // Update status with indicator
-        function updateStatus(element, status, type) {
-            const indicator = `<span class="status-indicator status-${type}"></span>`;
-            element.innerHTML = indicator + status;
-        }
-        
-        // Check if AR.js is loaded
-        if (window.ARjs) {
-            updateStatus(arjsStatus, 'Loaded', 'ok');
-        } else {
-            updateStatus(arjsStatus, 'Failed to load', 'error');
-        }
-        
-        // Camera access check
-        navigator.mediaDevices.getUserMedia({ video: true })
-            .then(function(stream) {
-                updateStatus(cameraStatus, 'Access granted', 'ok');
-                // Stop the stream since AR.js will handle it
-                stream.getTracks().forEach(track => track.stop());
-            })
-            .catch(function(err) {
-                updateStatus(cameraStatus, 'Access denied: ' + err.message, 'error');
-            });
-        
-        // Marker event listeners
-        document.querySelectorAll('a-marker').forEach(marker => {
-            marker.addEventListener('markerFound', () => {
-                updateStatus(markerStatus, `Detected: ${marker.id}`, 'ok');
-                lastEvent.textContent = `${marker.id} found`;
-                arContainer.classList.add('marker-detected');
-            });
+        // Auto start AR when page loads
+        window.addEventListener('load', function() {
+            const loading = document.getElementById('loading');
+            const arScene = document.getElementById('arScene');
             
-            marker.addEventListener('markerLost', () => {
-                updateStatus(markerStatus, 'Waiting for marker', 'warning');
-                lastEvent.textContent = `${marker.id} lost`;
-                arContainer.classList.remove('marker-detected');
-            });
+            // Show AR scene after 1 second
+            setTimeout(() => {
+                loading.style.display = 'none';
+                arScene.style.display = 'block';
+            }, 1000);
         });
-        
-        // Screenshot functionality
-        screenshotBtn.addEventListener('click', function() {
-            try {
-                // Create a temporary canvas to capture the AR view
-                const scene = document.querySelector('a-scene');
-                if (scene.components.screenshot) {
-                    scene.components.screenshot.capture('perspective');
-                } else {
-                    // Fallback method
-                    const canvas = document.querySelector('a-scene').canvas;
-                    const link = document.createElement('a');
-                    link.download = 'ar-selfie.png';
-                    link.href = canvas.toDataURL();
-                    link.click();
-                }
-                lastEvent.textContent = 'Screenshot taken';
-            } catch (error) {
-                console.error('Screenshot error:', error);
-                lastEvent.textContent = 'Screenshot failed: ' + error.message;
-            }
-        });
-        
-        // Toggle debug panel
-        let debugVisible = true;
-        toggleDebugBtn.addEventListener('click', function() {
-            debugVisible = !debugVisible;
-            debugPanel.style.display = debugVisible ? 'block' : 'none';
-            lastEvent.textContent = `Debug panel ${debugVisible ? 'shown' : 'hidden'}`;
-        });
-        
-        // Scene loaded event
-        arScene.addEventListener('loaded', function() {
-            updateStatus(markerStatus, 'Ready - show a marker', 'warning');
-            lastEvent.textContent = 'Scene loaded successfully';
-        });
-        
-        // Add error handling for the scene
-        arScene.addEventListener('error', function(e) {
-            console.error('Scene error:', e);
-            lastEvent.textContent = 'Scene error occurred';
-        });
-        
-        // Log AR.js version if available
-        if (window.ARjs) {
-            console.log('AR.js loaded successfully');
-            console.log('AR.js Context:', ARjs.Context);
-        }
     </script>
 </body>
 </html>
