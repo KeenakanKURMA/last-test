@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
     <title>AR 4 Pattern dengan 3D Animation</title>
     <script src="https://aframe.io/releases/1.4.1/aframe.min.js"></script>
     <script src="https://cdn.rawgit.com/jeromeetienne/AR.js/2.2.1/aframe/build/aframe-ar.min.js"></script>
@@ -9,11 +10,11 @@
 <body style="margin: 0; overflow: hidden;">
     <a-scene embedded arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: true;">
       
-        <!-- Cahaya -->
+        <!-- Lighting -->
         <a-entity light="type: ambient; color: #ffffff; intensity: 0.8"></a-entity>
         <a-entity light="type: directional; color: #ffffff; intensity: 1.0" position="2 5 3"></a-entity>
 
-        <!-- Pattern 1 dengan 3D Animation -->
+        <!-- Pattern 1 -->
         <a-marker type="pattern" url="patterns/pattern1.patt">
             <a-entity 
                 gltf-model="models/animation1.glb"
@@ -23,7 +24,7 @@
             ></a-entity>
         </a-marker>
 
-        <!-- Pattern 2 dengan 3D Animation -->
+        <!-- Pattern 2 -->
         <a-marker type="pattern" url="patterns/pattern2.patt">
             <a-entity 
                 gltf-model="models/animation2.glb"
@@ -33,7 +34,7 @@
             ></a-entity>
         </a-marker>
 
-        <!-- Pattern 3 dengan 3D Animation -->
+        <!-- Pattern 3 -->
         <a-marker type="pattern" url="patterns/pattern3.patt">
             <a-entity 
                 gltf-model="models/animation3.glb"
@@ -43,7 +44,7 @@
             ></a-entity>
         </a-marker>
 
-        <!-- Pattern 4 dengan 3D Animation -->
+        <!-- Pattern 4 -->
         <a-marker type="pattern" url="patterns/pattern4.patt">
             <a-entity 
                 gltf-model="models/animation4.glb"
@@ -59,7 +60,7 @@
 
     <div style="position: absolute; bottom: 10px; left: 0; right: 0; text-align: center; color: white; background: rgba(0,0,0,0.7); padding: 10px;">
         <h3>AR 4 Pattern dengan 3D Animation</h3>
-        <p>Scan pattern untuk melihat animasi 3D!</p>
+        <p>Allow camera permission dan scan pattern!</p>
     </div>
 </body>
 </html>
