@@ -1,60 +1,187 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>AR 4 Pattern dengan 3D Animation</title>
-    <script src="https://aframe.io/releases/1.4.1/aframe.min.js"></script>
-    <script src="https://cdn.rawgit.com/jeromeetienne/AR.js/2.2.1/aframe/build/aframe-ar.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/aframe-extras@6.1.1/dist/aframe-extras.min.js"></script>
+    <meta charset="utf-8">
+    <title>AR Camera Fix</title>
+    <script src="https://cdn.jsdelivr.net/npm/aframe@1.5.0/dist/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.4/dist/mindar-image-aframe.prod.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #000;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        
+        #camera-status {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+        
+        #status-message {
+            font-size: 20px;
+            margin-bottom: 30px;
+            color: #fff;
+        }
+        
+        #start-button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            font-size: 24px;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 20px;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.5);
+            transition: all 0.3s;
+        }
+        
+        #start-button:hover {
+            background: #45a049;
+            transform: scale(1.05);
+        }
+        
+        .instructions {
+            margin-top: 30px;
+            color: #ccc;
+            font-size: 16px;
+            max-width: 80%;
+        }
+    </style>
 </head>
-<body style="margin: 0; overflow: hidden;">
-    <a-scene embedded arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: true;">
-      
-        <!-- Cahaya -->
-        <a-entity light="type: ambient; color: #ffffff; intensity: 0.8"></a-entity>
-        <a-entity light="type: directional; color: #ffffff; intensity: 1.0" position="2 5 3"></a-entity>
+<body>
+    <div id="camera-status">
+        <h1>🎯 AR EXPERIENCE</h1>
+        <div id="status-message">Klik butang di bawah untuk mulakan</div>
+        <button id="start-button" onclick="startCamera()">📷 START CAMERA</button>
+        <div class="instructions">
+            • Pastikan anda "Allow" camera permissions<br>
+            • Arahkan camera pada target image<br>
+            • Pastikan cahaya mencukupi
+        </div>
+    </div>
 
-        <!-- Pattern 1 dengan 3D Animation -->
-        <a-marker type="pattern" url="patterns/pattern1.patt">
-            <a-entity 
-                gltf-model="models/animation1.glb"
-                scale="0.5 0.5 0.5"
-                position="0 0.5 0"
-                animation-mixer="clip: *; loop: repeat"
-            ></a-entity>
-        </a-marker>
+    <a-scene 
+        mindar-image="imageTargetSrc: ./targets.mind; autoStart: false;"
+        embedded
+        vr-mode-ui="enabled: false"
+        device-orientation-permission-ui="enabled: false">
 
-        <!-- Pattern 2 dengan 3D Animation -->
-        <a-marker type="pattern" url="patterns/pattern2.patt">
-            <a-entity 
-                gltf-model="models/animation2.glb"
-                scale="0.5 0.5 0.5"
-                position="0 0.5 0"
-                animation-mixer="clip: *; loop: repeat"
-            ></a-entity>
-        </a-marker>
+        <a-assets>
+            <a-asset-item id="model1" src="./model1.glb"></a-asset-item>
+            <a-asset-item id="model2" src="./model2.glb"></a-asset-item>
+            <a-asset-item id="model3" src="./model3.glb"></a-asset-item>
+            <a-asset-item id="model4" src="./model4.glb"></a-asset-item>
+        </a-assets>
 
-        <!-- Pattern 3 dengan 3D Animation -->
-        <a-marker type="pattern" url="patterns/pattern3.patt">
-            <a-entity 
-                gltf-model="models/animation3.glb"
-                scale="0.5 0.5 0.5"
-                position="0 0.5 0"
-                animation-mixer="clip: *; loop: repeat"
-            ></a-entity>
-        </a-marker>
+        <!-- Target 1 -->
+        <a-entity mindar-image-target="targetIndex: 0">
+            <a-entity gltf-model="#model1" scale="0.5 0.5 0.5"></a-entity>
+        </a-entity>
 
-        <!-- Pattern 4 dengan 3D Animation -->
-        <a-marker type="pattern" url="patterns/pattern4.patt">
-            <a-entity 
-                gltf-model="models/animation4.glb"
-                scale="0.5 0.5 0.5"
-                position="0 0.5 0"
-                animation-mixer="clip: *; loop: repeat"
-            ></a-entity>
-        </a-marker>
+        <!-- Target 2 -->
+        <a-entity mindar-image-target="targetIndex: 1">
+            <a-entity gltf-model="#model2" scale="0.5 0.5 0.5"></a-entity>
+        </a-entity>
 
-        <!-- Camera -->
+        <!-- Target 3 -->
+        <a-entity mindar-image-target="targetIndex: 2">
+            <a-entity gltf-model="#model3" scale="0.5 0.5 0.5"></a-entity>
+        </a-entity>
+
+        <!-- Target 4 -->
+        <a-entity mindar-image-target="targetIndex: 3">
+            <a-entity gltf-model="#model4" scale="0.5 0.5 0.5"></a-entity>
+        </a-entity>
+
         <a-entity camera></a-entity>
     </a-scene>
+
+    <script>
+        const statusDiv = document.getElementById('camera-status');
+        const statusMessage = document.getElementById('status-message');
+        const scene = document.querySelector('a-scene');
+
+        // Function untuk start camera
+        window.startCamera = async function() {
+            statusMessage.innerHTML = "🔄 Meminta camera permission...";
+            document.getElementById('start-button').style.background = '#ff9800';
+            document.getElementById('start-button').innerHTML = '⏳ Loading...';
+            
+            try {
+                // Check camera permission dulu
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { 
+                        facingMode: 'environment'  // Gunakan camera belakang
+                    } 
+                });
+                
+                statusMessage.innerHTML = "✅ Camera permission granted!";
+                document.getElementById('start-button').innerHTML = '🚀 Starting AR...';
+                
+                // Stop stream test
+                stream.getTracks().forEach(track => track.stop());
+                
+                // Start MindAR - tunggu scene loaded dulu
+                if (scene.hasLoaded) {
+                    const mindarSystem = scene.systems["mindar-image-system"];
+                    await mindarSystem.start();
+                    statusMessage.innerHTML = "✅ AR Started! Scan target image...";
+                    
+                    // Hide status after 2 seconds
+                    setTimeout(() => {
+                        statusDiv.style.display = 'none';
+                    }, 2000);
+                } else {
+                    scene.addEventListener('loaded', async () => {
+                        const mindarSystem = scene.systems["mindar-image-system"];
+                        await mindarSystem.start();
+                        statusMessage.innerHTML = "✅ AR Started! Scan target image...";
+                        setTimeout(() => {
+                            statusDiv.style.display = 'none';
+                        }, 2000);
+                    });
+                }
+                
+            } catch (error) {
+                if (error.name === 'NotAllowedError') {
+                    statusMessage.innerHTML = "❌ Camera permission denied!<br>Please allow camera access.";
+                    document.getElementById('start-button').innerHTML = '❌ Try Again';
+                    document.getElementById('start-button').style.background = '#f44336';
+                } else if (error.name === 'NotFoundError') {
+                    statusMessage.innerHTML = "❌ No camera found!";
+                    document.getElementById('start-button').innerHTML = '❌ No Camera';
+                    document.getElementById('start-button').style.background = '#f44336';
+                } else {
+                    statusMessage.innerHTML = "❌ Error: " + error.message;
+                    document.getElementById('start-button').innerHTML = '❌ Error';
+                    document.getElementById('start-button').style.background = '#f44336';
+                }
+                
+                // Reset button after 3 seconds
+                setTimeout(() => {
+                    document.getElementById('start-button').innerHTML = '📷 START CAMERA';
+                    document.getElementById('start-button').style.background = '#4CAF50';
+                }, 3000);
+            }
+        }
+
+        // Auto start check
+        setTimeout(() => {
+            statusMessage.innerHTML = "Ready! Click START CAMERA to begin";
+        }, 1000);
+    </script>
 </body>
 </html>
