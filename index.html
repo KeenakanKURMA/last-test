@@ -1,103 +1,51 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>AR Experience</title>
-    <script src="https://aframe.io/releases/1.4.1/aframe.min.js"></script>
-    <script src="https://cdn.rawgit.com/jeromeetienne/AR.js/2.2.1/aframe/build/aframe-ar.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/aframe-extras@6.1.1/dist/aframe-extras.min.js"></script>
-    <style>
-        body {
-            margin: 0;
-            overflow: hidden;
-            background: #000;
-        }
-        .loading {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            text-align: center;
-            font-family: Arial;
-            z-index: 1000;
-        }
-    </style>
+  <title>AR 4 Marker Lantern Test</title>
+  <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
 </head>
-<body>
-    <!-- Loading Screen -->
-    <div class="loading" id="loading">
-        <h2>AR Experience</h2>
-        <p>Allow camera permission to start</p>
-    </div>
 
-    <!-- AR Scene -->
-    <a-scene 
-        embedded 
-        arjs="sourceType: webcam; debugUIEnabled: false; facingMode: environment;"
-        renderer="logarithmicDepthBuffer: true;"
-        style="display: none;"
-        id="arScene"
-    >
-        <!-- Lighting -->
-        <a-entity light="type: ambient; color: #ffffff; intensity: 0.8"></a-entity>
-        <a-entity light="type: directional; color: #ffffff; intensity: 1.0" position="2 5 3"></a-entity>
+<body style="margin:0; overflow:hidden;">
+  <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: true;" vr-mode-ui="enabled: false">
 
-        <!-- Pattern 1 -->
-        <a-marker type="pattern" url="patterns/pattern1.patt">
-            <a-entity 
-                gltf-model="models/animation1.glb"
-                scale="0.5 0.5 0.5"
-                position="0 0.5 0"
-                animation-mixer="clip: *; loop: repeat"
-            ></a-entity>
-        </a-marker>
+    <!-- Light for 3D models -->
+    <a-entity light="type: ambient; color: #ffffff; intensity: 0.6"></a-entity>
+    <a-entity light="type: directional; color: #ffffff; intensity: 0.8" position="1 1 1"></a-entity>
 
-        <!-- Pattern 2 -->
-        <a-marker type="pattern" url="patterns/pattern2.patt">
-            <a-entity 
-                gltf-model="models/animation2.glb"
-                scale="0.5 0.5 0.5"
-                position="0 0.5 0"
-                animation-mixer="clip: *; loop: repeat"
-            ></a-entity>
-        </a-marker>
+    <!-- Marker 1 -->
+    <a-marker type="pattern" url="pattern1.patt">
+      <a-box position="0 0.5 0" scale="0.5 0.5 0.5" color="yellow"
+             animation="property: rotation; to: 0 360 0; loop: true; dur: 4000"></a-box>
+    </a-marker>
 
-        <!-- Pattern 3 -->
-        <a-marker type="pattern" url="patterns/pattern3.patt">
-            <a-entity 
-                gltf-model="models/animation3.glb"
-                scale="0.5 0.5 0.5"
-                position="0 0.5 0"
-                animation-mixer="clip: *; loop: repeat"
-            ></a-entity>
-        </a-marker>
+    <!-- Marker 2 -->
+    <a-marker type="pattern" url="pattern2.patt">
+      <a-box position="0 0.5 0" scale="0.5 0.5 0.5" color="red"
+             animation="property: rotation; to: 0 360 0; loop: true; dur: 4000"></a-box>
+    </a-marker>
 
-        <!-- Pattern 4 -->
-        <a-marker type="pattern" url="patterns/pattern4.patt">
-            <a-entity 
-                gltf-model="models/animation4.glb"
-                scale="0.5 0.5 0.5"
-                position="0 0.5 0"
-                animation-mixer="clip: *; loop: repeat"
-            ></a-entity>
-        </a-marker>
+    <!-- Marker 3 -->
+    <a-marker type="pattern" url="pattern3.patt">
+      <a-box position="0 0.5 0" scale="0.5 0.5 0.5" color="blue"
+             animation="property: rotation; to: 0 360 0; loop: true; dur: 4000"></a-box>
+    </a-marker>
 
-        <a-entity camera></a-entity>
-    </a-scene>
+    <!-- Marker 4 -->
+    <a-marker type="pattern" url="pattern4.patt">
+      <a-box position="0 0.5 0" scale="0.5 0.5 0.5" color="green"
+             animation="property: rotation; to: 0 360 0; loop: true; dur: 4000"></a-box>
+    </a-marker>
 
-    <script>
-        // Auto start AR when page loads
-        window.addEventListener('load', function() {
-            const loading = document.getElementById('loading');
-            const arScene = document.getElementById('arScene');
-            
-            // Show AR scene after 1 second
-            setTimeout(() => {
-                loading.style.display = 'none';
-                arScene.style.display = 'block';
-            }, 1000);
-        });
-    </script>
+    <!-- Built-in hiro marker for testing -->
+    <a-marker preset="hiro">
+      <a-box position="0 0.5 0" scale="0.5 0.5 0.5" color="purple"
+             animation="property: rotation; to: 0 360 0; loop: true; dur: 4000"></a-box>
+    </a-marker>
+
+    <!-- Camera -->
+    <a-entity camera></a-entity>
+
+  </a-scene>
 </body>
 </html>
