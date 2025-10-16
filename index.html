@@ -1,51 +1,38 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>AR 4 Marker Lantern Test</title>
-  <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
-  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    <meta charset="utf-8">
+    <title>Multi-Marker AR with Animated GLB</title>
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
 </head>
+<body style='margin : 0px; overflow: hidden;'>
 
-<body style="margin:0; overflow:hidden;">
-  <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: true;" vr-mode-ui="enabled: false">
+    <a-scene embedded arjs='sourceType: webcam;'>
 
-    <!-- Light for 3D models -->
-    <a-entity light="type: ambient; color: #ffffff; intensity: 0.6"></a-entity>
-    <a-entity light="type: directional; color: #ffffff; intensity: 0.8" position="1 1 1"></a-entity>
+        <!-- Anchor 1: First marker and animated model -->
+        <a-marker type="pattern" url="pattern1.patt">
+            <a-gltf-model src="model1.glb" animation-mixer></a-gltf-model>
+        </a-marker>
 
-    <!-- Marker 1 -->
-    <a-marker type="pattern" url="pattern1.patt">
-      <a-box position="0 0.5 0" scale="0.5 0.5 0.5" color="yellow"
-             animation="property: rotation; to: 0 360 0; loop: true; dur: 4000"></a-box>
-    </a-marker>
+        <!-- Anchor 2: Second marker and animated model -->
+        <a-marker type="pattern" url="pattern2.patt">
+            <a-gltf-model src="model2.glb" animation-mixer></a-gltf-model>
+        </a-marker>
 
-    <!-- Marker 2 -->
-    <a-marker type="pattern" url="pattern2.patt">
-      <a-box position="0 0.5 0" scale="0.5 0.5 0.5" color="red"
-             animation="property: rotation; to: 0 360 0; loop: true; dur: 4000"></a-box>
-    </a-marker>
+        <!-- Anchor 3: Third marker and animated model -->
+        <a-marker type="pattern" url="pattern3.patt">
+            <a-gltf-model src="model3.glb" animation-mixer></a-gltf-model>
+        </a-marker>
 
-    <!-- Marker 3 -->
-    <a-marker type="pattern" url="pattern3.patt">
-      <a-box position="0 0.5 0" scale="0.5 0.5 0.5" color="blue"
-             animation="property: rotation; to: 0 360 0; loop: true; dur: 4000"></a-box>
-    </a-marker>
+        <!-- Anchor 4: Fourth marker and animated model -->
+        <a-marker type="pattern" url="pattern4.patt">
+            <a-gltf-model src="model4.glb" animation-mixer></a-gltf-model>
+        </a-marker>
 
-    <!-- Marker 4 -->
-    <a-marker type="pattern" url="pattern4.patt">
-      <a-box position="0 0.5 0" scale="0.5 0.5 0.5" color="green"
-             animation="property: rotation; to: 0 360 0; loop: true; dur: 4000"></a-box>
-    </a-marker>
+        <!-- Camera setup -->
+        
 
-    <!-- Built-in hiro marker for testing -->
-    <a-marker preset="hiro">
-      <a-box position="0 0.5 0" scale="0.5 0.5 0.5" color="purple"
-             animation="property: rotation; to: 0 360 0; loop: true; dur: 4000"></a-box>
-    </a-marker>
-
-    <!-- Camera -->
-    <a-entity camera></a-entity>
-
-  </a-scene>
+    </a-scene>
 </body>
 </html>
